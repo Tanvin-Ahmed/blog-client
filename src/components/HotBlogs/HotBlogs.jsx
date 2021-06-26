@@ -2,10 +2,12 @@ import React, { useRef } from "react";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import ShowBlogList from "../ShowBlogList/ShowBlogList";
+import Loader from "../Loader/Loader";
 
 const HotBlogs = () => {
-  const { allBlogData } = useSelector((state) => ({
+  const { allBlogData, loadingSpinner } = useSelector((state) => ({
     allBlogData: state.blogsReducer.allBlogData,
+    loadingSpinner: state.blogsReducer.loadingSpinner,
   }));
   const hotBlogs = useRef([]);
   useEffect(() => {
@@ -24,9 +26,15 @@ const HotBlogs = () => {
       <h1 className="text-center text-red-400 font-semibold text-2xl my-4">
         Hot Blogs are here
       </h1>
-      {hotBlogs.current.slice(0, 6).map((blog, index) => (
-        <ShowBlogList blog={blog} index={index} />
-      ))}
+      {loadingSpinner ? (
+        <div className="flex justify-center items-center my-4">
+          <Loader />
+        </div>
+      ) : (
+        hotBlogs.current
+          .slice(0, 6)
+          .map((blog, index) => <ShowBlogList blog={blog} index={index} />)
+      )}
     </div>
   );
 };
