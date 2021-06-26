@@ -11,11 +11,11 @@ import Loader from "../Loader/Loader";
 const BlogPage = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
-  const { blogDetails, commentFormToggle, loadingSpinner } = useSelector(
+  const { blogDetails, commentFormToggle, spinnerForBlogDetails } = useSelector(
     (state) => ({
       blogDetails: state.blogsReducer.blogDetails,
       commentFormToggle: state.blogsReducer.commentFormToggle,
-      loadingSpinner: state.blogsReducer.loadingSpinner,
+      spinnerForBlogDetails: state.blogsReducer.spinnerForBlogDetails,
     })
   );
   const openModal = () => {
@@ -31,7 +31,7 @@ const BlogPage = () => {
 
   return (
     <div>
-      {loadingSpinner ? (
+      {spinnerForBlogDetails ? (
         <div className="flex justify-center items-center my-5">
           <Loader />
         </div>
