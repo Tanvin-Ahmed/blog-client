@@ -1,24 +1,82 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import Header from "./components/NavBar/Header/Header";
+import SideBar from "./components/NavBar/SideBar/SideBar";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import Home from "./components/Home/Home";
+import Footer from "./components/Footer/Footer";
+import BlogPage from "./components/BlogPage/BlogPage";
+import Auth from "./components/Auth/Auth";
+import PostBlog from "./components/Admin/PostBlogs/PostBlog";
+import MakeAdmin from "./components/Admin/MakeAdmin/MakeAdmin";
+import Dashboard from "./components/Admin/Dashboard/Dashboard";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect, useMemo, useRef } from "react";
+import { getAdmin, getUserDataAfterReload } from "./app/actions/userAction";
+import PrivateRoute from "./components/Auth/PrivateRoute";
+import {
+  getBlogsData,
+  updateBlogListAfterDelete,
+  updateBlogsWhenUpdateByAdmin,
+} from "./app/actions/blogsActions";
+import io from "socket.io-client";
+import HotBlogs from "./components/HotBlogs/HotBlogs";
 
 function App() {
+  const dispatch = useDispatch();
+  const socket = useRef(io("http://localhost:5000/"));
+  const { allBlogData } = useSelector((state) => ({
+    allBlogData: state.blogsReducer.allBlogData,
+  }));
+
+  useMemo(() => {
+    const userInfo = JSON.parse(sessionStorage.getItem("blog/user"));
+    if (userInfo?.email) {
+      dispatch(getAdmin(userInfo?.email));
+    }
+    dispatch(getBlogsData());
+  }, [dispatch]);
+
+  useEffect(() => {
+    socket.current.on("deleted-blog-id", (obj) => {
+      const newBlogs = allBlogData?.filter((blog) => blog._id !== obj._id);
+      dispatch(updateBlogListAfterDelete(newBlogs));
+    });
+    socket.current.on("updated-blog-id", (obj) => {
+      dispatch(updateBlogsWhenUpdateByAdmin(obj._id, allBlogData));
+    });
+    dispatch(getUserDataAfterReload());
+  }, [dispatch, allBlogData]);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <Header />
+      <SideBar />
+      <Switch>
+        <Route exact path="/">
+          <Home />
+          <Footer />
+        </Route>
+        <PrivateRoute path="/blog/:id">
+          <BlogPage socket={socket.current} />
+          <Footer />
+        </PrivateRoute>
+        <Route path="/login">
+          <Auth />
+        </Route>
+        <PrivateRoute path="/HotBlogs">
+          <HotBlogs />
+        </PrivateRoute>
+        <PrivateRoute path="/admin/blog-upload-form">
+          <PostBlog />
+        </PrivateRoute>
+        <PrivateRoute path="/admin/make-admin">
+          <MakeAdmin />
+        </PrivateRoute>
+        <PrivateRoute path="/admin/dashboard">
+          <Dashboard socket={socket.current} />
+        </PrivateRoute>
+      </Switch>
+    </Router>
   );
 }
 
