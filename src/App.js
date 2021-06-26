@@ -23,7 +23,7 @@ import HotBlogs from "./components/HotBlogs/HotBlogs";
 
 function App() {
   const dispatch = useDispatch();
-  const socket = useRef(io("http://localhost:5000/"));
+  const socket = useRef(io("https://blog-server-12345.herokuapp.com/"));
   const { allBlogData } = useSelector((state) => ({
     allBlogData: state.blogsReducer.allBlogData,
   }));

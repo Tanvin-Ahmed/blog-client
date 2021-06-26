@@ -18,7 +18,7 @@ export const postBlog = (blog) => {
       payload: true,
     });
     axios
-      .post("http://localhost:5000/blog/upload", blog)
+      .post("https://blog-server-12345.herokuapp.com/blog/upload", blog)
       .then((data) => {
         dispatch({
           type: POST_BLOG_INFO,
@@ -47,7 +47,7 @@ export const getBlogsData = () => {
       payload: true,
     });
     axios
-      .get("http://localhost:5000/blog/find-all-blogs")
+      .get("https://blog-server-12345.herokuapp.com/blog/find-all-blogs")
       .then((data) => {
         dispatch({
           type: LOADING_SPINNER,
@@ -74,7 +74,7 @@ export const getOneBlogsDetails = (id) => {
       type: LOADING_SPINNER_FOR_BLOG_DETAILS,
       payload: true,
     });
-    axios(`http://localhost:5000/blog/find-blog/${id}`)
+    axios(`https://blog-server-12345.herokuapp.com/blog/find-blog/${id}`)
       .then((data) => {
         dispatch({
           type: LOADING_SPINNER_FOR_BLOG_DETAILS,
@@ -102,7 +102,10 @@ export const updateBlog = (updatedBlog) => {
       payload: true,
     });
     axios
-      .put("http://localhost:5000/blog/update-blog", updatedBlog)
+      .put(
+        "https://blog-server-12345.herokuapp.com/blog/update-blog",
+        updatedBlog
+      )
       .then((data) => {
         console.log("update successfully");
         dispatch({
@@ -124,14 +127,16 @@ export const updateBlog = (updatedBlog) => {
 
 export const updateBlogsWhenUpdateByAdmin = (id, blogList) => {
   return (dispatch) => {
-    axios(`http://localhost:5000/blog/find-blog/${id}`).then((data) => {
-      const updateBlogIndex = blogList.findIndex((blog) => blog._id === id);
-      blogList.splice(updateBlogIndex, 1, data.data);
-      dispatch({
-        type: UPDATE_BLOGS_WHEN_ANY_ITEM_WILL_UPDATED,
-        payload: blogList,
-      });
-    });
+    axios(`https://blog-server-12345.herokuapp.com/blog/find-blog/${id}`).then(
+      (data) => {
+        const updateBlogIndex = blogList.findIndex((blog) => blog._id === id);
+        blogList.splice(updateBlogIndex, 1, data.data);
+        dispatch({
+          type: UPDATE_BLOGS_WHEN_ANY_ITEM_WILL_UPDATED,
+          payload: blogList,
+        });
+      }
+    );
   };
 };
 
@@ -142,7 +147,7 @@ export const deleteBlog = (id) => {
       payload: true,
     });
     axios
-      .delete(`http://localhost:5000/blog/delete-blog/${id}`)
+      .delete(`https://blog-server-12345.herokuapp.com/blog/delete-blog/${id}`)
       .then((response) => {
         console.log("deleted");
         dispatch({
