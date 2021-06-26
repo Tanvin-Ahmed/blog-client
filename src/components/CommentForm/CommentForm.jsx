@@ -1,6 +1,8 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import Modal from "react-modal";
+import { useDispatch, useSelector } from "react-redux";
+import { uploadComments } from "../../app/actions/blogsActions";
 
 const customStyles = {
   content: {
@@ -15,13 +17,19 @@ const customStyles = {
 
 Modal.setAppElement("#root");
 
-const CommentForm = ({ commentFormToggle, closeModal }) => {
+const CommentForm = ({ blogId, commentFormToggle, closeModal }) => {
+  const dispatch = useDispatch();
+  const { userInfo } = useSelector((state) => ({
+    userInfo: state.userReducer.userInfo,
+  }));
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
-  const onSubmit = (data) => console.log(data);
+  const onSubmit = (data) => {
+    dispatch(uploadComments(blogId, data));
+  };
   return (
     <div>
       <Modal
@@ -38,7 +46,7 @@ const CommentForm = ({ commentFormToggle, closeModal }) => {
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              class="h-6 w-6"
+              className="h-6 w-6"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -57,7 +65,7 @@ const CommentForm = ({ commentFormToggle, closeModal }) => {
           <input
             type="email"
             className="form-input px-2 py-2 w-full rounded mb-3"
-            defaultValue="test"
+            defaultValue={userInfo?.email}
             {...register("email", { required: true })}
             placeholder="Email"
           />
@@ -66,6 +74,7 @@ const CommentForm = ({ commentFormToggle, closeModal }) => {
           )}
           <input
             type="text"
+            defaultValue={userInfo?.name}
             className="form-input px-2 py-2 w-full rounded mb-3"
             {...register("name", { required: true })}
             placeholder="Name"
@@ -90,7 +99,7 @@ const CommentForm = ({ commentFormToggle, closeModal }) => {
             Comment{" "}
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              class="h-6 w-6 ml-3"
+              className="h-6 w-6 ml-3"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"

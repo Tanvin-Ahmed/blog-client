@@ -8,6 +8,7 @@ import {
   UPDATE_BLOGS_DATA_AFTER_DELETE,
   LOADING_SPINNER_FOR_UPDATE_BLOGS,
   UPDATE_BLOGS_WHEN_ANY_ITEM_WILL_UPDATED,
+  UPDATE_BLOG_DETAILS,
 } from "../type";
 
 const initialState = {
@@ -27,6 +28,11 @@ const blogsReducer = (state = initialState, action) => {
         allBlogData: action.payload,
       };
     case GET_ONE_BLOG_DETAILS:
+      return {
+        ...state,
+        blogDetails: action.payload,
+      };
+    case UPDATE_BLOG_DETAILS:
       return {
         ...state,
         blogDetails: action.payload,

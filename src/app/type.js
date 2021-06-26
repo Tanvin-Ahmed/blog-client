@@ -17,3 +17,4 @@ export const GET_ONE_BLOG_DETAILS = "get_one_blog_details";
 export const UPDATE_BLOGS_DATA_AFTER_DELETE = "update_blogs_data_after_delete";
 export const UPDATE_BLOGS_WHEN_ANY_ITEM_WILL_UPDATED =
   "update_blogs_when_any_item_will_update";
+export const UPDATE_BLOG_DETAILS = "update_blog_details";

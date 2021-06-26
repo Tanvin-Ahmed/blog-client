@@ -9,6 +9,7 @@ import {
   UPDATE_BLOGS_DATA_AFTER_DELETE,
   LOADING_SPINNER_FOR_UPDATE_BLOGS,
   UPDATE_BLOGS_WHEN_ANY_ITEM_WILL_UPDATED,
+  UPDATE_BLOG_DETAILS,
 } from "../type";
 
 export const postBlog = (blog) => {
@@ -18,7 +19,7 @@ export const postBlog = (blog) => {
       payload: true,
     });
     axios
-      .post("https://blog-server-12345.herokuapp.com/blog/upload", blog)
+      .post("http://localhost:5000/blog/upload", blog)
       .then((data) => {
         dispatch({
           type: POST_BLOG_INFO,
@@ -47,7 +48,7 @@ export const getBlogsData = () => {
       payload: true,
     });
     axios
-      .get("https://blog-server-12345.herokuapp.com/blog/find-all-blogs")
+      .get("http://localhost:5000/blog/find-all-blogs")
       .then((data) => {
         dispatch({
           type: LOADING_SPINNER,
@@ -74,7 +75,7 @@ export const getOneBlogsDetails = (id) => {
       type: LOADING_SPINNER_FOR_BLOG_DETAILS,
       payload: true,
     });
-    axios(`https://blog-server-12345.herokuapp.com/blog/find-blog/${id}`)
+    axios(`http://localhost:5000/blog/find-blog/${id}`)
       .then((data) => {
         dispatch({
           type: LOADING_SPINNER_FOR_BLOG_DETAILS,
@@ -102,10 +103,7 @@ export const updateBlog = (updatedBlog) => {
       payload: true,
     });
     axios
-      .put(
-        "https://blog-server-12345.herokuapp.com/blog/update-blog",
-        updatedBlog
-      )
+      .put("http://localhost:5000/blog/update-blog", updatedBlog)
       .then((data) => {
         console.log("update successfully");
         dispatch({
@@ -127,16 +125,30 @@ export const updateBlog = (updatedBlog) => {
 
 export const updateBlogsWhenUpdateByAdmin = (id, blogList) => {
   return (dispatch) => {
-    axios(`https://blog-server-12345.herokuapp.com/blog/find-blog/${id}`).then(
-      (data) => {
-        const updateBlogIndex = blogList.findIndex((blog) => blog._id === id);
-        blogList.splice(updateBlogIndex, 1, data.data);
-        dispatch({
-          type: UPDATE_BLOGS_WHEN_ANY_ITEM_WILL_UPDATED,
-          payload: blogList,
-        });
-      }
-    );
+    axios(`http://localhost:5000/blog/find-blog/${id}`).then((data) => {
+      const updateBlogIndex = blogList.findIndex((blog) => blog._id === id);
+      blogList.splice(updateBlogIndex, 1, data.data);
+      dispatch({
+        type: UPDATE_BLOGS_WHEN_ANY_ITEM_WILL_UPDATED,
+        payload: blogList,
+      });
+    });
+  };
+};
+
+export const uploadComments = (id, comment) => {
+  return (dispatch) => {
+    dispatch(getModalToggle(false));
+    axios
+      .put(`http://localhost:5000/blog/upload-comment/${id}`, comment)
+      .then((data) => console.log("comment uploaded successfully"))
+      .catch((err) => alert("Comment not upload, please try again"));
+  };
+};
+export const updateBlogDetailsAfterCommentUpload = (blogDetails) => {
+  return {
+    type: UPDATE_BLOG_DETAILS,
+    payload: blogDetails,
   };
 };
 
@@ -147,7 +159,7 @@ export const deleteBlog = (id) => {
       payload: true,
     });
     axios
-      .delete(`https://blog-server-12345.herokuapp.com/blog/delete-blog/${id}`)
+      .delete(`http://localhost:5000/blog/delete-blog/${id}`)
       .then((response) => {
         console.log("deleted");
         dispatch({

@@ -15,6 +15,7 @@ import { getAdmin, getUserDataAfterReload } from "./app/actions/userAction";
 import PrivateRoute from "./components/Auth/PrivateRoute";
 import {
   getBlogsData,
+  updateBlogDetailsAfterCommentUpload,
   updateBlogListAfterDelete,
   updateBlogsWhenUpdateByAdmin,
 } from "./app/actions/blogsActions";
@@ -23,9 +24,10 @@ import HotBlogs from "./components/HotBlogs/HotBlogs";
 
 function App() {
   const dispatch = useDispatch();
-  const socket = useRef(io("https://blog-server-12345.herokuapp.com/"));
-  const { allBlogData } = useSelector((state) => ({
+  const socket = useRef(io("http://localhost:5000/"));
+  const { allBlogData, blogDetails } = useSelector((state) => ({
     allBlogData: state.blogsReducer.allBlogData,
+    blogDetails: state.blogsReducer.blogDetails,
   }));
 
   useMemo(() => {
@@ -36,6 +38,7 @@ function App() {
     dispatch(getBlogsData());
   }, [dispatch]);
 
+  let newCommentBlogId = useRef("");
   useEffect(() => {
     socket.current.on("deleted-blog-id", (obj) => {
       const newBlogs = allBlogData?.filter((blog) => blog._id !== obj._id);
@@ -44,8 +47,28 @@ function App() {
     socket.current.on("updated-blog-id", (obj) => {
       dispatch(updateBlogsWhenUpdateByAdmin(obj._id, allBlogData));
     });
+
+    socket.current.on("find-a-new-comment", (obj) => {
+      if (newCommentBlogId !== obj._id) {
+        // console.log(obj);
+        if (blogDetails?._id && blogDetails?._id === obj._id) {
+          let updatedComments = blogDetails?.comments;
+          console.log(updatedComments);
+          if (updatedComments.length > 0) updatedComments?.push(obj);
+          else {
+            updatedComments = [];
+            updatedComments.push(obj);
+          }
+          const updatedBlogDetails = {
+            ...blogDetails,
+            comments: updatedComments,
+          };
+          dispatch(updateBlogDetailsAfterCommentUpload(updatedBlogDetails));
+        }
+      }
+    });
     dispatch(getUserDataAfterReload());
-  }, [dispatch, allBlogData]);
+  }, [dispatch, allBlogData, blogDetails]);
 
   return (
     <Router>
