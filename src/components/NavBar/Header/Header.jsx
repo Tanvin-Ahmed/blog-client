@@ -14,7 +14,7 @@ const Header = () => {
     dispatch(getSideBarToggle(toggle));
   };
   return (
-    <div className="shadow flex justify-between items-center">
+    <div className="sticky top-0 bg-white shadow flex justify-between items-center">
       <div onClick={() => handleSideBarOpen(!isSideBarOpen)} className="menu">
         {!isSideBarOpen ? (
           <svg

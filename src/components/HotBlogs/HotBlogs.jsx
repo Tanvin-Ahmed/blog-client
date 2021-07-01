@@ -23,7 +23,7 @@ const HotBlogs = () => {
   }, [allBlogData]);
   return (
     <div>
-      <h1 className="text-center text-red-400 font-semibold text-2xl my-4">
+      <h1 className="text-center text-red-400 font-semibold text-3xl my-4">
         Hot Blogs are here
       </h1>
       {loadingSpinner ? (
@@ -32,7 +32,7 @@ const HotBlogs = () => {
         </div>
       ) : (
         hotBlogs.current
-          .slice(0, 6)
+          .slice(0, 5)
           .map((blog, index) => <ShowBlogList blog={blog} index={index} />)
       )}
     </div>

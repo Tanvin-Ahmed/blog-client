@@ -10,6 +10,8 @@ import {
   LOADING_SPINNER_FOR_UPDATE_BLOGS,
   UPDATE_BLOGS_WHEN_ANY_ITEM_WILL_UPDATED,
   UPDATE_BLOG_DETAILS,
+  UPDATE_BLOGS_WHEN_ANY_LIKE_INSERT,
+  UPDATE_BLOGS_DATA_AFTER_UPLOAD_NEW_BLOGS,
 } from "../type";
 
 export const postBlog = (blog) => {
@@ -19,12 +21,8 @@ export const postBlog = (blog) => {
       payload: true,
     });
     axios
-      .post("https://blog-server-12345.herokuapp.com/blog/upload", blog)
+      .post("http://localhost:5000/blog/upload", blog)
       .then((data) => {
-        dispatch({
-          type: POST_BLOG_INFO,
-          payload: data.data,
-        });
         dispatch({
           type: LOADING_SPINNER_FOR_UPDATE_BLOGS,
           payload: false,
@@ -41,6 +39,13 @@ export const postBlog = (blog) => {
   };
 };
 
+export const updateBlogsDataWhenUploadNewBlog = (data) => {
+  return {
+    type: UPDATE_BLOGS_DATA_AFTER_UPLOAD_NEW_BLOGS,
+    payload: data,
+  };
+};
+
 export const getBlogsData = () => {
   return (dispatch) => {
     dispatch({
@@ -48,7 +53,7 @@ export const getBlogsData = () => {
       payload: true,
     });
     axios
-      .get("https://blog-server-12345.herokuapp.com/blog/find-all-blogs")
+      .get("http://localhost:5000/blog/find-all-blogs")
       .then((data) => {
         dispatch({
           type: LOADING_SPINNER,
@@ -75,7 +80,8 @@ export const getOneBlogsDetails = (id) => {
       type: LOADING_SPINNER_FOR_BLOG_DETAILS,
       payload: true,
     });
-    axios(`https://blog-server-12345.herokuapp.com/blog/find-blog/${id}`)
+    console.log("getOneBlogsDetails");
+    axios(`http://localhost:5000/blog/find-blog/${id}`)
       .then((data) => {
         dispatch({
           type: LOADING_SPINNER_FOR_BLOG_DETAILS,
@@ -103,17 +109,13 @@ export const updateBlog = (updatedBlog) => {
       payload: true,
     });
     axios
-      .put(
-        "https://blog-server-12345.herokuapp.com/blog/update-blog",
-        updatedBlog
-      )
+      .put("http://localhost:5000/blog/update-blog", updatedBlog)
       .then((data) => {
         console.log("update successfully");
         dispatch({
           type: LOADING_SPINNER_FOR_UPDATE_BLOGS,
           payload: false,
         });
-        alert("update successfully");
       })
       .catch((err) => {
         console.log(err.message);
@@ -126,18 +128,21 @@ export const updateBlog = (updatedBlog) => {
   };
 };
 
-export const updateBlogsWhenUpdateByAdmin = (id, blogList) => {
+export const updateBlogsWhenUpdateByAdmin = (allBlogData, updatedData) => {
   return (dispatch) => {
-    axios(`https://blog-server-12345.herokuapp.com/blog/find-blog/${id}`).then(
-      (data) => {
-        const updateBlogIndex = blogList.findIndex((blog) => blog._id === id);
-        blogList.splice(updateBlogIndex, 1, data.data);
-        dispatch({
-          type: UPDATE_BLOGS_WHEN_ANY_ITEM_WILL_UPDATED,
-          payload: blogList,
-        });
-      }
-    );
+    console.log(allBlogData);
+    const value = allBlogData.find((blog) => blog._id === updatedData._id);
+    const index = allBlogData.findIndex((blog) => blog._id === updatedData._id);
+    const newBlogDetails = {
+      ...value,
+      ...updatedData,
+    };
+    allBlogData.splice(index, 1, newBlogDetails);
+    // console.log(allBlogData);
+    dispatch({
+      type: UPDATE_BLOGS_WHEN_ANY_ITEM_WILL_UPDATED,
+      payload: allBlogData,
+    });
   };
 };
 
@@ -145,18 +150,51 @@ export const uploadComments = (id, comment) => {
   return (dispatch) => {
     dispatch(getModalToggle(false));
     axios
-      .put(
-        `https://blog-server-12345.herokuapp.com/blog/upload-comment/${id}`,
-        comment
-      )
+      .put(`http://localhost:5000/blog/upload-comment/${id}`, comment)
       .then((data) => console.log("comment uploaded successfully"))
       .catch((err) => alert("Comment not upload, please try again"));
   };
 };
+
+export const uploadLike = (id, like) => {
+  return (dispatch) => {
+    axios
+      .put(`http://localhost:5000/blog/upload-like/${id}`, like)
+      .then(() => console.log("like uploaded"))
+      .catch(() => alert("Like not set, please try again"));
+  };
+};
+
+export const uploadUnlike = (id, unlikeUser) => {
+  return (dispatch) => {
+    axios
+      .put(`http://localhost:5000/blog/upload-unlike/${id}`, unlikeUser)
+      .then(() => console.log("unlike uploaded"))
+      .catch(() => alert("Unlike not set, please try again"));
+  };
+};
+
 export const updateBlogDetailsAfterCommentUpload = (blogDetails) => {
   return {
     type: UPDATE_BLOG_DETAILS,
     payload: blogDetails,
+  };
+};
+
+export const updateIfAnyLikeInsert = (id, allBlogData, likes) => {
+  return (dispatch) => {
+    const value = allBlogData.find((blog) => blog._id === id);
+    const index = allBlogData.findIndex((blog) => blog._id === id);
+    const newBlogDetails = {
+      ...value,
+      like: likes,
+    };
+    allBlogData.splice(index, 1, newBlogDetails);
+    // console.log(allBlogData);
+    dispatch({
+      type: UPDATE_BLOGS_WHEN_ANY_LIKE_INSERT,
+      payload: allBlogData,
+    });
   };
 };
 
@@ -167,7 +205,7 @@ export const deleteBlog = (id) => {
       payload: true,
     });
     axios
-      .delete(`https://blog-server-12345.herokuapp.com/blog/delete-blog/${id}`)
+      .delete(`http://localhost:5000/blog/delete-blog/${id}`)
       .then((response) => {
         console.log("deleted");
         dispatch({

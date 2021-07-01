@@ -11,10 +11,13 @@ export const LOADING_SPINNER_FOR_BLOG_DETAILS =
 export const LOADING_SPINNER_FOR_UPDATE_BLOGS =
   "loading_spinner_for_update_blogs";
 
-export const POST_BLOG_INFO = "post_blog_info";
+export const UPDATE_BLOGS_DATA_AFTER_UPLOAD_NEW_BLOGS =
+  "update_blogs_data_after_upload_new_blogs";
 export const GET_ALL_BLOGS_INFO = "get_all_blogs_info";
 export const GET_ONE_BLOG_DETAILS = "get_one_blog_details";
 export const UPDATE_BLOGS_DATA_AFTER_DELETE = "update_blogs_data_after_delete";
 export const UPDATE_BLOGS_WHEN_ANY_ITEM_WILL_UPDATED =
   "update_blogs_when_any_item_will_update";
 export const UPDATE_BLOG_DETAILS = "update_blog_details";
+export const UPDATE_BLOGS_WHEN_ANY_LIKE_INSERT =
+  "update_blogs_when_any_like_insert";

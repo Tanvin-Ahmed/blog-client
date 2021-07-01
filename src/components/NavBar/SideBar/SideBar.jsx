@@ -24,14 +24,14 @@ const SideBar = () => {
   return (
     <div
       onClick={handleCloseSideBar}
-      style={{ height: "91vh" }}
+      style={{ height: "92vh" }}
       className={
         isSideBarOpen
-          ? "z-50 bg-white absolute w-4/5 md:w-52 shadow flex flex-col justify-between px-3 py-5"
+          ? "z-50 fixed left-0 bg-white w-4/5 md:w-52 shadow flex flex-col justify-between px-3 py-5"
           : "hidden"
       }
     >
-      <div className="h-96 font-samibold flex flex-col justify-around">
+      <div className="h-96 font-samibold flex flex-col justify-between">
         <Link
           to="/"
           className="transition duration-700 ease-in-out hover:bg-red-200 p-2 rounded shadow flex justify-between items-center"
@@ -80,7 +80,10 @@ const SideBar = () => {
                 />
               </svg>
             </Link>
-            <Link className="transition duration-700 ease-in-out hover:bg-red-200 p-2 rounded shadow flex justify-between items-center">
+            <Link
+              to="/popular-blogs"
+              className="transition duration-700 ease-in-out hover:bg-red-200 p-2 rounded shadow flex justify-between items-center"
+            >
               Popular Blogs{" "}
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -97,7 +100,10 @@ const SideBar = () => {
                 />
               </svg>
             </Link>
-            <Link className="transition duration-700 ease-in-out hover:bg-red-200 p-2 rounded shadow flex justify-between items-center">
+            <Link
+              to="/favorite-blogs"
+              className="transition duration-700 ease-in-out hover:bg-red-200 p-2 rounded shadow flex justify-between items-center"
+            >
               Favorite Blogs{" "}
               <svg
                 xmlns="http://www.w3.org/2000/svg"

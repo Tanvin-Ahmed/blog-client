@@ -2,13 +2,14 @@ import {
   MODAL_TOGGLE,
   GET_ALL_BLOGS_INFO,
   GET_ONE_BLOG_DETAILS,
-  POST_BLOG_INFO,
   LOADING_SPINNER,
   LOADING_SPINNER_FOR_BLOG_DETAILS,
   UPDATE_BLOGS_DATA_AFTER_DELETE,
   LOADING_SPINNER_FOR_UPDATE_BLOGS,
   UPDATE_BLOGS_WHEN_ANY_ITEM_WILL_UPDATED,
   UPDATE_BLOG_DETAILS,
+  UPDATE_BLOGS_WHEN_ANY_LIKE_INSERT,
+  UPDATE_BLOGS_DATA_AFTER_UPLOAD_NEW_BLOGS,
 } from "../type";
 
 const initialState = {
@@ -23,6 +24,11 @@ const initialState = {
 const blogsReducer = (state = initialState, action) => {
   switch (action.type) {
     case GET_ALL_BLOGS_INFO:
+      return {
+        ...state,
+        allBlogData: action.payload,
+      };
+    case UPDATE_BLOGS_DATA_AFTER_UPLOAD_NEW_BLOGS:
       return {
         ...state,
         allBlogData: action.payload,
@@ -42,11 +48,6 @@ const blogsReducer = (state = initialState, action) => {
         ...state,
         commentFormToggle: action.payload,
       };
-    case POST_BLOG_INFO:
-      return {
-        ...state,
-        allBlogData: [...state.allBlogData, action.payload],
-      };
     case UPDATE_BLOGS_WHEN_ANY_ITEM_WILL_UPDATED:
       return {
         ...state,
@@ -63,6 +64,11 @@ const blogsReducer = (state = initialState, action) => {
         spinnerForBlogDetails: action.payload,
       };
     case UPDATE_BLOGS_DATA_AFTER_DELETE:
+      return {
+        ...state,
+        allBlogData: action.payload,
+      };
+    case UPDATE_BLOGS_WHEN_ANY_LIKE_INSERT:
       return {
         ...state,
         allBlogData: action.payload,

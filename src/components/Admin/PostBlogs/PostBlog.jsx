@@ -6,8 +6,8 @@ import Loader from "../../Loader/Loader";
 
 const PostBlog = () => {
   const dispatch = useDispatch();
-  const { loadingSpinner } = useSelector((state) => ({
-    loadingSpinner: state.blogsReducer.loadingSpinner,
+  const { spinnerForBlogUpdate } = useSelector((state) => ({
+    spinnerForBlogUpdate: state.blogsReducer.spinnerForBlogUpdate,
   }));
   const {
     register,
@@ -116,7 +116,7 @@ const PostBlog = () => {
             </button>
           </div>
         </form>
-        {loadingSpinner && (
+        {spinnerForBlogUpdate && (
           <div className="flex justify-center items-center mt-3">
             <Loader />
           </div>

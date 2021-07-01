@@ -36,6 +36,7 @@ const EditModal = ({ selectedItem, commentFormToggle, closeModal }) => {
       uploadedTime: new Date().toUTCString(),
     };
     dispatch(updateBlog(updatedBlog));
+    closeModal();
   };
   return (
     <div>
