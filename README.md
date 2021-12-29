@@ -11,10 +11,7 @@
 ### Technology
 
 - React JS
-- Node JS
-- Express JS
-- MongoDB
-- Mongoose
+- Tailwind CSS
 - Socket.io
 
 Live Preview [Blog-web](https://blog-share-your-knowledge.netlify.app/).
