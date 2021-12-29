@@ -21,7 +21,7 @@ export const postBlog = blog => {
 			payload: true,
 		});
 		axios
-			.post("http://localhost:5000/blog/upload", blog)
+			.post("https://blog-server-12345.herokuapp.com/blog/upload", blog)
 			.then(data => {
 				dispatch({
 					type: LOADING_SPINNER_FOR_UPDATE_BLOGS,
@@ -53,7 +53,7 @@ export const getBlogsData = () => {
 			payload: true,
 		});
 		axios
-			.get("http://localhost:5000/blog/find-all-blogs")
+			.get("https://blog-server-12345.herokuapp.com/blog/find-all-blogs")
 			.then(data => {
 				dispatch({
 					type: LOADING_SPINNER,
@@ -81,7 +81,7 @@ export const getOneBlogsDetails = id => {
 			payload: true,
 		});
 		console.log("getOneBlogsDetails");
-		axios(`http://localhost:5000/blog/find-blog/${id}`)
+		axios(`https://blog-server-12345.herokuapp.com/blog/find-blog/${id}`)
 			.then(data => {
 				dispatch({
 					type: LOADING_SPINNER_FOR_BLOG_DETAILS,
@@ -109,7 +109,10 @@ export const updateBlog = updatedBlog => {
 			payload: true,
 		});
 		axios
-			.put("http://localhost:5000/blog/update-blog", updatedBlog)
+			.put(
+				"https://blog-server-12345.herokuapp.com/blog/update-blog",
+				updatedBlog
+			)
 			.then(data => {
 				console.log("update successfully");
 				dispatch({
@@ -150,7 +153,10 @@ export const uploadComments = (id, comment) => {
 	return dispatch => {
 		dispatch(getModalToggle(false));
 		axios
-			.put(`http://localhost:5000/blog/upload-comment/${id}`, comment)
+			.put(
+				`https://blog-server-12345.herokuapp.com/blog/upload-comment/${id}`,
+				comment
+			)
 			.then(data => console.log("comment uploaded successfully"))
 			.catch(err => alert("Comment not upload, please try again"));
 	};
@@ -159,7 +165,10 @@ export const uploadComments = (id, comment) => {
 export const uploadLike = (id, like) => {
 	return dispatch => {
 		axios
-			.put(`http://localhost:5000/blog/upload-like/${id}`, like)
+			.put(
+				`https://blog-server-12345.herokuapp.com/blog/upload-like/${id}`,
+				like
+			)
 			.then(() => console.log("like uploaded"))
 			.catch(() => alert("Like not set, please try again"));
 	};
@@ -168,7 +177,10 @@ export const uploadLike = (id, like) => {
 export const uploadUnlike = (id, unlikeUser) => {
 	return dispatch => {
 		axios
-			.put(`http://localhost:5000/blog/upload-unlike/${id}`, unlikeUser)
+			.put(
+				`https://blog-server-12345.herokuapp.com/blog/upload-unlike/${id}`,
+				unlikeUser
+			)
 			.then(() => console.log("unlike uploaded"))
 			.catch(() => alert("Unlike not set, please try again"));
 	};
@@ -205,7 +217,7 @@ export const deleteBlog = id => {
 			payload: true,
 		});
 		axios
-			.delete(`http://localhost:5000/blog/delete-blog/${id}`)
+			.delete(`https://blog-server-12345.herokuapp.com/blog/delete-blog/${id}`)
 			.then(response => {
 				console.log("deleted");
 				dispatch({

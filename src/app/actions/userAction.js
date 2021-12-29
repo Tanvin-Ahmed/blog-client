@@ -14,7 +14,7 @@ export const postSignUp = (userData, history, from) => {
 		});
 
 		axios
-			.post("http://localhost:5000/user/find-user", {
+			.post("https://blog-server-12345.herokuapp.com/user/find-user", {
 				email: userData.email,
 			})
 			.then(data => {
@@ -26,7 +26,10 @@ export const postSignUp = (userData, history, from) => {
 					});
 				} else {
 					axios
-						.post("http://localhost:5000/user/sign-up", userData)
+						.post(
+							"https://blog-server-12345.herokuapp.com/user/sign-up",
+							userData
+						)
 						.then(data => {
 							sessionStorage.setItem("blog/user", JSON.stringify(data.data));
 							dispatch({
@@ -67,7 +70,7 @@ export const getUserInfo = (user, history, from) => {
 		});
 
 		axios
-			.post(`http://localhost:5000/user/find-user`, user)
+			.post(`https://blog-server-12345.herokuapp.com/user/find-user`, user)
 			.then(data => {
 				sessionStorage.setItem("blog/user", JSON.stringify(data.data));
 				const userData = JSON.parse(sessionStorage.getItem("blog/user"));
@@ -109,7 +112,7 @@ export const addAdmin = email => {
 			payload: true,
 		});
 		axios
-			.post("http://localhost:5000/user/add-admin", email)
+			.post("https://blog-server-12345.herokuapp.com/user/add-admin", email)
 			.then(data => {
 				alert("Add new Admin Successfully");
 			})
@@ -121,7 +124,7 @@ export const addAdmin = email => {
 
 export const getAdmin = email => {
 	return dispatch => {
-		axios(`http://localhost:5000/user/find-admin/${email}`)
+		axios(`https://blog-server-12345.herokuapp.com/user/find-admin/${email}`)
 			.then(data => {
 				if (data.data) {
 					dispatch({

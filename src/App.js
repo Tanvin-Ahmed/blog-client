@@ -35,7 +35,7 @@ function App() {
 	}));
 
 	useEffect(() => {
-		const s = io("http://localhost:5000/");
+		const s = io("https://blog-server-12345.herokuapp.com/");
 		socket.current = s;
 
 		return () => s.close();
